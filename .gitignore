@@ -1,0 +1,11 @@
+# Kit montado (gerado; remonte com scripts\atualizar-zip.ps1)
+ioterminal-kit/
+ioterminal-kit.zip
+
+# Logs e lixo local (o .cursor/hooks.json deve ser versionado)
+*.log
+.cursor/atualizar-zip.log
+logs-vm/
+Thumbs.db
+Desktop.ini
+.DS_Store

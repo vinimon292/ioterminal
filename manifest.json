@@ -1,0 +1,114 @@
+{
+  "schemaVersion": 1,
+  "packageVersion": "2026.09.16",
+  "packageRoot": "IOTERMINAL",
+  "minFreeDiskBytes": 1073741824,
+  "bundledExtractor": {
+    "file": "ferramentas\\7z.exe",
+    "sha256": "4a41aa37786c7eae7451e81c2c97458d5d1ae5a3a8154637a0d5f77adc05e619",
+    "libraryFile": "7z.dll",
+    "librarySha256": "bbd705e3b58ca7677c1e9e67473f166a6712da034dcb567d571fbb67507a443f"
+  },
+  "components": [
+    {
+      "id": "driver_cdm20824",
+      "displayName": "Driver FTDI CDM 2.08.24",
+      "kind": "driver-archive",
+      "order": 1,
+      "archive": "DRIVERS\\CDM20824_Setup.rar",
+      "sha256": "56927a00022c388dad127f16cdf0bf099e9fbb1c26ec20d2678a7d13d6c1f068",
+      "innerExeMatch": ["CDM20824_Setup.exe", "*.exe"],
+      "innerSha256": "fad015fa77dd57ade8573e65b90d42653fc38f800691c222373fe29269a8da75",
+      "driverInf": ["ftdibus.inf", "ftdiport.inf"],
+      "skipKernelBuild": 22000,
+      "modernArchive": "DRIVERS\\CDM21236.zip",
+      "modernSha256": "5eed1e82e976187a0ad9e62148243c63692b71c823e3f2f2230db004893add0b",
+      "modernDriverVersion": "2.12.36.20",
+      "timeoutSeconds": 600,
+      "detect": [
+        { "type": "driver", "originalName": "ftdibus.inf", "driverVersion": "2.8.24.0" },
+        { "type": "driver", "originalName": "ftdiport.inf", "driverVersion": "2.8.24.0" }
+      ],
+      "validate": [
+        { "type": "driver", "originalName": "ftdibus.inf", "driverVersion": "2.8.24.0" },
+        { "type": "driver", "originalName": "ftdiport.inf", "driverVersion": "2.8.24.0" }
+      ],
+      "pnpDevices": [
+        { "hardwareId": "USB\\VID_0403", "optional": true }
+      ],
+      "uninstall": {
+        "kind": "driver",
+        "originalNames": ["ftdibus.inf", "ftdiport.inf"],
+        "driverVersion": "2.8.24.0"
+      }
+    },
+    {
+      "id": "ioterminal",
+      "displayName": "IOT Multitool V50B",
+      "kind": "portable-archive",
+      "order": 2,
+      "archive": "INSTALADOR\\IOT_MULTITOOLV50B.rar",
+      "sha256": "2b5cb663486619f2eb94474694c806bab5950879157050a291415a7621532541",
+      "installDir": "C:\\IOT_MULTITOOLV50B",
+      "mainExe": "iot_MULTITOOLv50B.exe",
+      "runAsAdministrator": true,
+      "desktopShortcut": true,
+      "timeoutSeconds": 900,
+      "detect": [
+        { "type": "file", "path": "{installDir}\\iot_MULTITOOLv50B.exe" }
+      ],
+      "validate": [
+        { "type": "file", "path": "{installDir}\\iot_MULTITOOLv50B.exe" },
+        { "type": "dir", "path": "{installDir}\\img", "containsPattern": "*.bin" },
+        { "type": "dir", "path": "{installDir}\\files" }
+      ],
+      "uninstall": {
+        "kind": "remove-dir",
+        "path": "{installDir}"
+      }
+    },
+    {
+      "id": "d2xx_runtime",
+      "displayName": "Biblioteca D2XX (FTD2XX.dll)",
+      "kind": "dll-copy",
+      "order": 3,
+      "fromComponent": "driver_cdm20824",
+      "files": [
+        { "source": "i386\\ftd2xx.dll", "target": "{installDir}\\ftd2xx.dll" },
+        { "source": "i386\\ftd2xx.dll", "target": "{syswow64}\\ftd2xx.dll" }
+      ],
+      "detect": [
+        { "type": "file", "path": "{installDir}\\ftd2xx.dll" },
+        { "type": "file", "path": "{syswow64}\\ftd2xx.dll" }
+      ],
+      "validate": [
+        { "type": "file", "path": "{installDir}\\ftd2xx.dll" },
+        { "type": "file", "path": "{syswow64}\\ftd2xx.dll" }
+      ],
+      "uninstall": {
+        "kind": "remove-file",
+        "paths": [
+          "{installDir}\\ftd2xx.dll"
+        ]
+      }
+    },
+    {
+      "id": "license_idmonact",
+      "displayName": "Licenca IDMONACT",
+      "kind": "license-copy",
+      "order": 4,
+      "source": "LICENCA\\IDMONACT",
+      "targetSubDir": "IDMONACT",
+      "detect": [
+        { "type": "dir", "path": "{installDir}\\IDMONACT", "containsPattern": "*.bin", "recurse": true }
+      ],
+      "validate": [
+        { "type": "dir", "path": "{installDir}\\IDMONACT", "containsPattern": "*.bin", "recurse": true }
+      ],
+      "uninstall": {
+        "kind": "remove-dir",
+        "path": "{installDir}\\IDMONACT"
+      }
+    }
+  ]
+}

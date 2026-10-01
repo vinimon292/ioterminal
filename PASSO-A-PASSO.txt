@@ -1,0 +1,82 @@
+PASSO A PASSO - Kit IOTerminal (clientes)
+=========================================
+
+O que este kit instala
+- Driver FTDI (2.08.24 no Windows 10 antigo; 2.12.36.20 WHQL no Windows 11)
+- IOT Multitool V50B em C:\IOT_MULTITOOLV50B (abre sempre como administrador)
+- Biblioteca FTD2XX.dll (obrigatoria para o programa abrir)
+- Licenca IDMONACT dentro da pasta do IOT Multitool
+
+Use sempre o ZIP completo. Nao misture arquivos de kits antigos.
+
+
+1) Antes de comecar
+-------------------
+- Nao precisa instalar nada antes. Nao precisa de internet.
+- O kit ja traz tudo, inclusive o extrator dos pacotes.
+
+
+2) No PC do cliente
+-------------------
+- Copie o ioterminal-kit.zip para o computador.
+- Clique com o botao direito no ZIP -> Extrair tudo...
+- Extraia para:  C:\ioterminal-kit
+  (ao terminar deve existir C:\ioterminal-kit\iniciar-kit.cmd)
+
+Se o Windows criar C:\ioterminal-kit\ioterminal-kit\ (pasta dentro de pasta),
+mova o conteudo para C:\ioterminal-kit\ e apague a pasta extra.
+
+
+3) Executar a instalacao
+------------------------
+- Abra C:\ioterminal-kit no Explorador (nao de dentro do ZIP).
+- Clique DUAS vezes em iniciar-kit.cmd
+  (ou botao direito -> Executar como administrador)
+- Aceite o UAC: clique em SIM.
+
+A primeira janela preta pode fechar na hora. Isso e normal.
+Uma SEGUNDA janela abre e fica na tela mostrando o andamento.
+
+No final aparece === SUMARIO ===
+- INSTALLED = instalou agora
+- SKIPPED   = ja estava no PC (so o driver; o IOT e apagado e reinstalado sempre)
+
+Rodar o iniciar-kit.cmd de novo e seguro: ele fecha o IOT se estiver aberto,
+apaga C:\IOT_MULTITOOLV50B e instala de novo. Use isso depois de um erro
+(Themida, licenca, teste) para comecar limpo.
+
+
+4) Conferir
+-----------
+- Conecte a interface USB.
+- Abra o atalho "IOT Multitool V50B" na area de trabalho
+  (vai pedir administrador: isso e correto).
+- A pasta C:\IOT_MULTITOOLV50B deve conter a pasta IDMONACT e o arquivo ftd2xx.dll.
+- Se aparecer "Cannot find FTD2XX.DLL", o kit esta desatualizado. Recopie o ZIP inteiro e rode de novo.
+- Se ao conectar a interface aparecer "Um driver nao pode ser carregado" (ftdibus.sys),
+  o kit antigo instalou um driver de 2012 que o Windows 11 recusa. Rode o iniciar-kit.cmd
+  desta versao, desconecte a interface e conecte de novo.
+
+
+Se der erro
+-----------
+Codigo 10  = nao rodou como administrador. Repita o passo 3.
+Codigo 20  = pasta do kit incompleta. Extraia o ZIP inteiro de novo.
+Codigo 21  = arquivo do kit corrompido ou alterado. Recopie o ZIP completo.
+             NAO tente contornar: pode ser arquivo trocado.
+Codigo 22  = extrator do kit ausente. Extraia o ZIP inteiro de novo.
+Codigo 40  = driver nao validou. Envie o log.
+Codigo 42  = licenca nao chegou na pasta. Envie o log.
+Codigo 45  = ftd2xx.dll nao chegou na pasta do IOT ou em SysWOW64. Envie o log.
+
+Log da instalacao:
+C:\ProgramData\OficinaBinaria\ioterminal-setup\
+
+Duvida: envie o arquivo de log mais recente dessa pasta.
+
+
+Nao faca
+--------
+- Nao rode o instalador de dentro do ZIP.
+- Nao renomeie as pastas DRIVERS, INSTALADOR, LICENCA e ferramentas.
+- Nao substitua so um arquivo do kit; recopie o ZIP inteiro.

@@ -1,0 +1,17 @@
+{
+  "version": 1,
+  "hooks": {
+    "afterFileEdit": [
+      {
+        "command": "powershell -NoProfile -ExecutionPolicy Bypass -File scripts/atualizar-zip.ps1 -Hook",
+        "timeout": 120
+      }
+    ],
+    "stop": [
+      {
+        "command": "powershell -NoProfile -ExecutionPolicy Bypass -File scripts/atualizar-zip.ps1 -Hook",
+        "timeout": 120
+      }
+    ]
+  }
+}

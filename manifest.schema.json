@@ -1,0 +1,145 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://oficinabinaria.local/ioterminal/manifest.schema.json",
+  "title": "IOTerminal Installer Manifest",
+  "description": "Contrato de pacotes e predicados para installer.ps1",
+  "type": "object",
+  "required": ["schemaVersion", "packageVersion", "components"],
+  "additionalProperties": false,
+  "properties": {
+    "schemaVersion": { "type": "integer", "minimum": 1 },
+    "packageVersion": { "type": "string", "minLength": 1 },
+    "packageRoot": { "type": "string", "minLength": 1 },
+    "minFreeDiskBytes": { "type": "integer", "minimum": 0 },
+    "bundledExtractor": { "$ref": "#/definitions/bundledExtractor" },
+    "components": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "#/definitions/component" }
+    }
+  },
+  "definitions": {
+    "bundledExtractor": {
+      "type": "object",
+      "description": "Extrator .rar embutido no kit, verificado por hash antes de ser executado",
+      "required": ["file", "sha256"],
+      "additionalProperties": false,
+      "properties": {
+        "file": { "type": "string", "minLength": 1 },
+        "sha256": { "type": "string", "pattern": "^[0-9a-fA-F]{64}$" },
+        "libraryFile": { "type": "string" },
+        "librarySha256": { "type": "string", "pattern": "^[0-9a-fA-F]{64}$" }
+      }
+    },
+    "component": {
+      "type": "object",
+      "required": ["id", "displayName", "kind", "order", "detect", "validate", "uninstall"],
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "type": "string",
+          "enum": ["driver_cdm20824", "ioterminal", "d2xx_runtime", "license_idmonact"]
+        },
+        "displayName": { "type": "string", "minLength": 1 },
+        "kind": {
+          "type": "string",
+          "enum": ["driver-archive", "portable-archive", "dll-copy", "license-copy"]
+        },
+        "order": { "type": "integer", "minimum": 1 },
+        "archive": { "type": "string" },
+        "source": { "type": "string" },
+        "sha256": { "type": "string" },
+        "innerSha256": { "type": "string" },
+        "innerExeMatch": { "type": "array", "items": { "type": "string" } },
+        "driverInf": { "type": "array", "items": { "type": "string" } },
+        "skipKernelBuild": { "type": "integer", "minimum": 1 },
+        "modernArchive": { "type": "string", "minLength": 1 },
+        "modernSha256": { "type": "string", "pattern": "^[0-9a-fA-F]{64}$" },
+        "modernDriverVersion": { "type": "string", "minLength": 1 },
+        "installDir": { "type": "string" },
+        "mainExe": { "type": "string" },
+        "fromComponent": { "type": "string" },
+        "files": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "required": ["source", "target"],
+            "additionalProperties": false,
+            "properties": {
+              "source": { "type": "string", "minLength": 1 },
+              "target": { "type": "string", "minLength": 1 }
+            }
+          }
+        },
+        "targetSubDir": { "type": "string" },
+        "runAsAdministrator": { "type": "boolean" },
+        "desktopShortcut": { "type": "boolean" },
+        "timeoutSeconds": { "type": "integer", "minimum": 1 },
+        "detect": { "type": "array", "items": { "$ref": "#/definitions/predicate" } },
+        "validate": { "type": "array", "items": { "$ref": "#/definitions/predicate" } },
+        "pnpDevices": { "type": "array", "items": { "$ref": "#/definitions/pnpDevice" } },
+        "uninstall": { "$ref": "#/definitions/uninstall" }
+      },
+      "allOf": [
+        {
+          "if": { "properties": { "kind": { "const": "driver-archive" } } },
+          "then": { "required": ["archive", "driverInf"] }
+        },
+        {
+          "if": { "properties": { "kind": { "const": "portable-archive" } } },
+          "then": { "required": ["archive", "installDir"] }
+        },
+        {
+          "if": { "properties": { "kind": { "const": "dll-copy" } } },
+          "then": { "required": ["fromComponent", "files"] }
+        },
+        {
+          "if": { "properties": { "kind": { "const": "license-copy" } } },
+          "then": { "required": ["source"] }
+        }
+      ]
+    },
+    "predicate": {
+      "type": "object",
+      "required": ["type"],
+      "additionalProperties": false,
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": ["file", "dir", "driver", "registry", "service"]
+        },
+        "path": { "type": "string" },
+        "minVersion": { "type": "string" },
+        "containsPattern": { "type": "string" },
+        "recurse": { "type": "boolean" },
+        "originalName": { "type": "string" },
+        "driverVersion": { "type": "string" },
+        "name": { "type": "string" },
+        "expectedValue": { "type": "string" },
+        "state": { "type": "string" }
+      }
+    },
+    "pnpDevice": {
+      "type": "object",
+      "required": ["hardwareId"],
+      "additionalProperties": false,
+      "properties": {
+        "hardwareId": { "type": "string" },
+        "optional": { "type": "boolean", "default": true }
+      }
+    },
+    "uninstall": {
+      "type": "object",
+      "required": ["kind"],
+      "additionalProperties": false,
+      "properties": {
+        "kind": { "type": "string", "enum": ["driver", "remove-dir", "remove-file"] },
+        "path": { "type": "string" },
+        "paths": { "type": "array", "items": { "type": "string" } },
+        "originalNames": { "type": "array", "items": { "type": "string" } },
+        "driverVersion": { "type": "string" }
+      }
+    }
+  }
+}
